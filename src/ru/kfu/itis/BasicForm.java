@@ -22,6 +22,7 @@ public class BasicForm extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.setSize(500, 500);
+        this.setTitle("MaGic HandShakes");
 
         JPanel panel = new JPanel(new GridLayout(1,3));
         tf_friend_1 = new JTextField("id1");

@@ -22,7 +22,9 @@ import java.util.regex.Pattern;
  */
 public abstract class Tools {
 
-
+    private static LinkedList<User> list;
+    private static int level = 0;
+    private static int attempts = 0;
 
     public static String getAnswer(String us1, String us2, String exc){
         String answer = "";
@@ -108,7 +110,7 @@ public abstract class Tools {
 
                         }
                         if(!uId.equals("")) {
-                            LinkedList<User> list = new LinkedList<User>();
+                            list = new LinkedList<User>();
                             // System.out.println("!!!");
                             list.add(new User(user_1, 0, ""));
 //                    matcher = p2.matcher(uId);
@@ -125,7 +127,7 @@ public abstract class Tools {
                             con = url.openConnection();
                             BufferedReader inReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                             //System.out.println(user_2);
-                            int level = 0;
+
                             int readId = 0;
                             while (!list.isEmpty() && readId != user_2 && level != 10) {
 
@@ -218,26 +220,36 @@ public abstract class Tools {
                         }
                     }else{
                         // System.out.println(2);
-                        throw new Exception();
+                        throw new RuntimeException();
                     }
 
 
                     in.close();
                 }else{
                     // System.out.println(1);
-                    throw new Exception();
+                    throw new RuntimeException();
                 }
 
 //        } catch (ParserConfigurationException e) {
 //            e.printStackTrace();
 //        } catch (SAXException e) {
 //            e.printStackTrace();
-            } catch (Exception e) {
+            }catch (IOException e){
+                if(attempts < 10) {
+                    attempts++;
+                    answer = getAnswer(list.getFirst().id + "", us2, exc);
+                }else{
+                    answer = "error";
+                }
+            }
+
+            catch (Exception e) {
                 answer = "error!";
                 e.printStackTrace();
             } finally {
                 //System.out.println(user_1 + " " + user_2);
-
+                level = 0;
+                attempts = 0;
                 try {
 //                URL url = new URL("https://api.vk.com/method/friends.get.xml?user_id=" + user_1);
 //                URLConnection con = url.openConnection();
@@ -315,7 +327,7 @@ public abstract class Tools {
                 }
 
                 if (!uId.equals("")){
-                    LinkedList<User> list = new LinkedList<User>();
+                    list = new LinkedList<User>();
                    // System.out.println("!!!");
                     list.add(new User(user_1, 0, ""));
 //                    matcher = p2.matcher(uId);
@@ -422,26 +434,35 @@ public abstract class Tools {
                     }
                 }else{
                    // System.out.println(2);
-                    throw new Exception();
+                    throw new RuntimeException();
                 }
 
 
                 in.close();
             }else{
                // System.out.println(1);
-                throw new Exception();
+                throw new RuntimeException();
             }
 
 //        } catch (ParserConfigurationException e) {
 //            e.printStackTrace();
 //        } catch (SAXException e) {
 //            e.printStackTrace();
-        } catch (Exception e) {
+        }catch(IOException e){
+            if(attempts < 10) {
+                attempts++;
+                answer = getAnswer(list.getFirst().id + "", us2, "");
+            }else{
+                answer = "error";
+            }
+        }
+        catch (Exception e) {
             answer = "error!";
             e.printStackTrace();
         } finally {
             //System.out.println(user_1 + " " + user_2);
-
+            level = 0;
+            attempts = 0;
             try {
 //                URL url = new URL("https://api.vk.com/method/friends.get.xml?user_id=" + user_1);
 //                URLConnection con = url.openConnection();
