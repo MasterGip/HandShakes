@@ -25,8 +25,10 @@ public abstract class Tools {
     private static LinkedList<User> list;
     private static int level = 0;
     private static int attempts = 0;
+    private static String path = "";
 
     public static String getAnswer(String us1, String us2, String exc){
+//        Main.frame.btn_go.setText("Loading");
         String answer = "";
         if (exc.equals("")){
             answer = getAnswer(us1, us2);
@@ -111,8 +113,8 @@ public abstract class Tools {
                         }
                         if(!uId.equals("")) {
                             list = new LinkedList<User>();
-                            // System.out.println("!!!");
-                            list.add(new User(user_1, 0, ""));
+                            System.out.println("!!!");
+                            list.add(new User(user_1, 0, path));
 //                    matcher = p2.matcher(uId);
 //                    matcher.find();
                             matcher = p2.matcher(uId);
@@ -130,13 +132,15 @@ public abstract class Tools {
 
                             int readId = 0;
                             while (!list.isEmpty() && readId != user_2 && level != 10) {
-
+//                                System.out.println(level);
+                                int sc = 0;
                                 while (list.getFirst().level == level && readId != user_2) {
+//                                    System.out.println(sc++);
                                     url = new URL("https://api.vk.com/method/friends.get.xml?user_id=" + list.getFirst().id);
                                     con = url.openConnection();
                                     in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                                     readId = 0;
-                                    System.out.println(list.getFirst().id);
+//                                    System.out.println(list.getFirst().id);
                                     while ((inputLine = in.readLine()) != null && readId != user_2) {
 
 //                            System.out.println("Friends");
@@ -147,14 +151,17 @@ public abstract class Tools {
                                             if(Integer.parseInt(matcher.group()) != user_e) {
                                                 readId = Integer.parseInt(matcher.group());
                                                 list.add(new User(readId, level, list.getFirst().path + "," + list.getFirst().id));
+//                                                System.out.println(list.getFirst().path);
                                             }
 
                                         }
 
                                     }
                                     list.removeFirst();
+//                                    System.out.println("Кончилась обработка");
                                 }
                                 level++;
+
 
                             }
 
@@ -188,7 +195,7 @@ public abstract class Tools {
                                             }
                                         }
                                     }
-                                    answer += "(" + idsOfFriends[i] + ") -> ";
+                                    answer += "(" + idsOfFriends[i] + ") -> \n";
                                 }
 
                                 url = new URL("https://api.vk.com/method/users.get.xml?user_ids=" + list.getLast().id);
@@ -237,6 +244,7 @@ public abstract class Tools {
             }catch (IOException e){
                 if(attempts < 10) {
                     attempts++;
+                    path = list.getFirst().path;
                     answer = getAnswer(list.getFirst().id + "", us2, exc);
                 }else{
                     answer = "error";
@@ -250,6 +258,7 @@ public abstract class Tools {
                 //System.out.println(user_1 + " " + user_2);
                 level = 0;
                 attempts = 0;
+                path = "";
                 try {
 //                URL url = new URL("https://api.vk.com/method/friends.get.xml?user_id=" + user_1);
 //                URLConnection con = url.openConnection();
@@ -267,6 +276,7 @@ public abstract class Tools {
                 }
             }
         }
+//        Main.frame.btn_go.setText("GO!");
         return answer;
     }
 
@@ -329,7 +339,7 @@ public abstract class Tools {
                 if (!uId.equals("")){
                     list = new LinkedList<User>();
                    // System.out.println("!!!");
-                    list.add(new User(user_1, 0, ""));
+                    list.add(new User(user_1, 0, path));
 //                    matcher = p2.matcher(uId);
 //                    matcher.find();
                     matcher = p2.matcher(uId);
@@ -403,7 +413,7 @@ public abstract class Tools {
                                     }
                                 }
                             }
-                            answer += "(" + idsOfFriends[i] + ") -> ";
+                            answer += "(" + idsOfFriends[i] + ") -> \n";
                         }
 
                         url = new URL("https://api.vk.com/method/users.get.xml?user_ids=" + list.getLast().id);
@@ -451,6 +461,7 @@ public abstract class Tools {
         }catch(IOException e){
             if(attempts < 10) {
                 attempts++;
+                path = list.getFirst().path;
                 answer = getAnswer(list.getFirst().id + "", us2, "");
             }else{
                 answer = "error";
@@ -463,6 +474,7 @@ public abstract class Tools {
             //System.out.println(user_1 + " " + user_2);
             level = 0;
             attempts = 0;
+            path = "";
             try {
 //                URL url = new URL("https://api.vk.com/method/friends.get.xml?user_id=" + user_1);
 //                URLConnection con = url.openConnection();

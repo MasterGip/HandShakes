@@ -13,7 +13,7 @@ public class BasicForm extends JFrame {
     private JTextField tf_friend_1;
     private JTextField tf_friend_2;
     private JTextField tf_exception;
-    private JButton btn_go;
+    public JButton btn_go;
 
 
 
@@ -30,14 +30,22 @@ public class BasicForm extends JFrame {
         tf_exception = new JTextField();
         tf_exception.setToolTipText("Найти пути, исключая данного пользователя");
         btn_go = new JButton("GO!");
+        //btn_go.setText("!");
         btn_go.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //btn_go.setText("!");
                 String user_1 = tf_friend_1.getText();
                 String user_2 = tf_friend_2.getText();
                 String exceptionally = tf_exception.getText();
+                //btn_go.setText("Загрузка");
+
+//                Main.frame.setVisible(true);
                 String answer = Tools.getAnswer(user_1, user_2, exceptionally);
-                JOptionPane.showMessageDialog(Main.frame, answer);
+                btn_go.setText("GO!");
+
+                JOptionPane.showMessageDialog(Main.frame, answer, "Связь", JOptionPane.INFORMATION_MESSAGE);
+
 
             }
         });
